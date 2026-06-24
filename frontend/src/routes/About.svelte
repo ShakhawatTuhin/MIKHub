@@ -15,10 +15,10 @@
   ];
 
   const stats = [
-    { number: '500+', label: 'International Students' },
-    { number: '50+', label: 'Countries Represented' },
-    { number: '100+', label: 'Successfully Completed Projects' },
-    { number: '30+', label: 'Partner Organizations' }
+    { number: '120+', label: 'International Students' },
+    { number: '15+', label: 'Countries Represented' },
+    { number: '25+', label: 'Successfully Completed Projects' },
+    { number: '8+', label: 'Partner Organizations' }
   ];
 </script>
 

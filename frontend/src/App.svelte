@@ -6,6 +6,7 @@
   import JoinUs from './routes/JoinUs.svelte';
   import Careers from './routes/Careers.svelte';
   import Events from './routes/Events.svelte';
+  import Founders from './routes/Founders.svelte';
 
   export let url = '';
   let isMenuOpen = false;
@@ -30,6 +31,7 @@
       <Link to="/join-us" on:click={() => isMenuOpen = false}>Join Us</Link>
       <Link to="/careers" on:click={() => isMenuOpen = false}>Careers</Link>
       <Link to="/events" on:click={() => isMenuOpen = false}>Events</Link>
+      <Link to="/founders" on:click={() => isMenuOpen = false}>Founders</Link>
     </div>
   </nav>
 
@@ -40,6 +42,7 @@
     <Route path="/join-us" component={JoinUs} />
     <Route path="/careers" component={Careers} />
     <Route path="/events" component={Events} />
+    <Route path="/founders" component={Founders} />
   </main>
 </Router>
 
