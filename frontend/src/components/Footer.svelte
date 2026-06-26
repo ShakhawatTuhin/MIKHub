@@ -7,7 +7,7 @@
 
     <div class="footer__brand">
       <Link to="/">
-        <img src="/logo.png" alt="MIK-HUB" class="footer__logo" />
+        <img src="/logo.jpeg" alt="MIK-HUB" class="footer__logo" />
       </Link>
       <p class="footer__tagline">Where students build, learn and launch their careers.</p>
     </div>
@@ -133,12 +133,12 @@
   }
 
   /* ── Admin link ──────────────────────────── */
-  .footer__admin {
+  :global(.footer__admin)  {
     color: var(--color-text-muted) !important;
     font-size: var(--text-sm);
   }
 
-  .footer__admin:hover {
+  :global(.footer__admin:hover) {
     color: var(--color-white) !important;
   }
 

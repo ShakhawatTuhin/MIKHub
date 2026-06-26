@@ -1,5 +1,6 @@
 <script>
   import { Link } from 'svelte-routing';
+  import logo from '/logo.jpeg';
 
   let menuOpen = false;
   const toggleMenu = () => (menuOpen = !menuOpen);
@@ -9,10 +10,12 @@
 <header class="navbar">
   <div class="navbar__top-bar"></div>
 
-  <div class="navbar__inner container">
+<div class="navbar__inner container">
+  <div class="navbar__logo">
     <Link to="/" class="navbar__logo" on:click={closeMenu}>
-      <img src="/logo.jpeg" alt="MIK-HUB" />
+      <img src={logo} alt="MIK-HUB" />
     </Link>
+  </div>
 
     <nav class="navbar__links" class:open={menuOpen}>
       <Link to="/activities" on:click={closeMenu}>Activities</Link>
@@ -63,7 +66,7 @@
   }
 
   /* ── Logo ────────────────────────────────── */
-  .navbar__logo img {
+  .navbar__logo :global(img){
     height:     40px;
     width:      auto;
     display:    block;
