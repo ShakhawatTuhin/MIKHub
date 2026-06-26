@@ -1,13 +1,28 @@
 <script>
+  import {onMount} from 'svelte';
   import { Link } from 'svelte-routing';
   import logo from '/logo.jpeg';
 
   let menuOpen = false;
+  let scrolled = false;
+
   const toggleMenu = () => (menuOpen = !menuOpen);
   const closeMenu = () => (menuOpen = false);
+
+  onMount(() => {
+    const handleScroll = () => {
+      scrolled = window.scrollY > 50;
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  });
 </script>
 
-<header class="navbar">
+<header class="navbar" class:scrolled={scrolled}>
   <div class="navbar__top-bar"></div>
 
 <div class="navbar__inner container">
@@ -44,11 +59,30 @@
 <style>
   /* ── Shell ───────────────────────────────── */
   .navbar {
-    position:   sticky;
-    top:        0;
-    z-index:    100;
-    background: var(--color-nav-bg);
-    box-shadow: var(--shadow-sm);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+
+  z-index: 100;
+
+  background: transparent;
+
+  box-shadow: none;
+
+  transition:
+    background-color 0.3s ease,
+    backdrop-filter 0.3s ease,
+    box-shadow 0.3s ease;
+  }
+
+  .navbar.scrolled {
+  background: rgba(255,255,255,0.9);
+
+  backdrop-filter: blur(12px);
+
+  box-shadow:
+    0 2px 10px rgba(0,0,0,0.08);
   }
 
   /* ── Purple top strip ────────────────────── */
@@ -82,12 +116,12 @@
   .navbar__links :global(a) {
     font-size:   var(--text-sm);
     font-weight: var(--font-medium);
-    color:       var(--color-text-primary);
-    transition:  color var(--transition-fast);
+    color:       white;
+    transition:  color 0.3s ease;
   }
 
-  .navbar__links :global(a:hover) {
-    color: var(--color-accent);
+  .navbar.scrolled .navbar__links :global(a) {
+  color: #111827;
   }
 
   /* ── CTA button ──────────────────────────── */
