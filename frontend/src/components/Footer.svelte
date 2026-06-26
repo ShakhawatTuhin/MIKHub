@@ -1,5 +1,6 @@
 <script>
   import { Link } from 'svelte-routing';
+  import logo from '/logo.jpeg';  
 </script>
 
 <footer class="footer">
@@ -7,7 +8,7 @@
 
     <div class="footer__brand">
       <Link to="/">
-        <img src="/logo.jpeg" alt="MIK-HUB" class="footer__logo" />
+        <img src={logo} alt="MIK-HUB" class="footer__logo" />
       </Link>
       <p class="footer__tagline">Where students build, learn and launch their careers.</p>
     </div>
