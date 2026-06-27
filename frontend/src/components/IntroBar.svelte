@@ -32,7 +32,7 @@
     font-weight: 600;
   }
 
-  a {
+  :global(a) {
     color: #17b8ff;
     text-decoration: none;
     font-weight: 700;

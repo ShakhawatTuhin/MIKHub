@@ -85,12 +85,6 @@
     0 2px 10px rgba(0,0,0,0.08);
   }
 
-  /* ── Purple top strip ────────────────────── */
-  .navbar__top-bar {
-    height:     3px;
-    background: var(--color-nav-border);
-  }
-
   /* ── Inner row ───────────────────────────── */
   .navbar__inner {
     display:         flex;
