@@ -16,6 +16,8 @@
   <section id="projects">   <Projects />   </section> 
   <section id="about">      <About />      </section> 
   <section id="faq">        <FAQ />        </section> 
-  <section id="apply">      <Apply />      </section> 
+  <section id="apply" class="apply-wrapper">
+    <Apply />
+  </section>
 </main>
 <Footer />
