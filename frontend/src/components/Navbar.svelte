@@ -1,6 +1,5 @@
 <script>
   import {onMount} from 'svelte';
-  import { Link } from 'svelte-routing';
   import logo from '/logo.jpeg';
 
   let menuOpen = false;
@@ -27,19 +26,19 @@
 
 <div class="navbar__inner container">
   <div class="navbar__logo">
-    <Link to="/" class="navbar__logo" on:click={closeMenu}>
-      <img src={logo} alt="MIK-HUB" />
-    </Link>
-  </div>
+  <a href="#home" on:click={closeMenu}>
+    <img src={logo} alt="MIK-HUB" />
+  </a>
+</div>
 
     <nav class="navbar__links" class:open={menuOpen}>
-      <Link to="/activities" on:click={closeMenu}>Activities</Link>
-      <Link to="/projects"   on:click={closeMenu}>Projects</Link>
-      <Link to="/about"      on:click={closeMenu}>About</Link>
-      <Link to="/faq"        on:click={closeMenu}>FAQ</Link>
-      <Link to="/apply" class="btn btn-primary navbar__cta" on:click={closeMenu}>
+     <a href="#activities" on:click={closeMenu}>Activities</a>
+     <a href="#projects"   on:click={closeMenu}>Projects</a>
+     <a href="#about"      on:click={closeMenu}>About</a>
+     <a href="#faq"        on:click={closeMenu}>FAQ</a>
+     <a href="#apply" class="btn btn-primary navbar__cta" on:click={closeMenu}>
         Apply Now
-      </Link>
+     </a>
     </nav>
 
     <button
