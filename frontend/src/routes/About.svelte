@@ -1,235 +1,247 @@
 <script>
-  const missionPoints = [
-    {
-      title: 'Our Mission',
-      description: 'To create an inclusive environment that empowers international students to thrive academically and professionally.'
-    },
-    {
-      title: 'Our Vision',
-      description: 'To be the leading platform for international student engagement, fostering cross-cultural collaboration and innovation.'
-    },
-    {
-      title: 'Our Values',
-      description: 'Diversity, Innovation, Collaboration, Excellence, and Global Perspective'
-    }
-  ];
+  const values = ['Curiosity', 'Collaboration', 'Craftsmanship', 'Impact'];
 
-  const stats = [
-    { number: '120+', label: 'International Students' },
-    { number: '15+', label: 'Countries Represented' },
-    { number: '25+', label: 'Successfully Completed Projects' },
-    { number: '8+', label: 'Partner Organizations' }
+  const pillars = [
+    {
+      icon: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>`,
+      title: 'Mission',
+      description: 'To empower students with real-world skills through hands-on projects and a collaborative community.'
+    },
+    {
+      icon: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`,
+      title: 'Vision',
+      description: 'To be the launchpad where every student turns curiosity into a thriving career.'
+    }
   ];
 </script>
 
-<div class="about">
-  <section class="hero">
-    <h1>About MIK HUB</h1>
-    <p class="subtitle">Empowering International Students for Success</p>
-  </section>
+<section class="about">
+  <div class="about__inner container">
 
-  <section class="mission">
-    <div class="mission-grid">
-      {#each missionPoints as point}
-        <div class="mission-card">
-          <h2>{point.title}</h2>
-          <p>{point.description}</p>
-        </div>
-      {/each}
+    <!-- Left column -->
+    <div class="about__left">
+      <span class="label">About MIK-HUB</span>
+      <h2 class="about__heading">A community where ideas become careers.</h2>
+      <p class="about__body">
+        We bring together curious students, hands-on projects, and mentors who
+        care — so that learning never stays theoretical.
+      </p>
+
+      <div class="about__pillars">
+        {#each pillars as p}
+          <div class="pillar">
+            <div class="pillar__icon">
+              {@html p.icon}
+            </div>
+            <div class="pillar__text">
+              <h3 class="pillar__title">{p.title}</h3>
+              <p class="pillar__desc">{p.description}</p>
+            </div>
+          </div>
+        {/each}
+      </div>
     </div>
-  </section>
 
-  <section class="impact">
-    <h2>Our Impact</h2>
-    <div class="stats-grid">
-      {#each stats as stat}
-        <div class="stat-card">
-          <h3>{stat.number}</h3>
-          <p>{stat.label}</p>
+    <!-- Right column — values card -->
+    <div class="about__right">
+      <div class="values-card">
+        <div class="values-card__header">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+          <span>Our values</span>
         </div>
-      {/each}
-    </div>
-  </section>
+        <p class="values-card__sub">The principles behind everything we build.</p>
 
-  <section class="join-section">
-    <h2>Be Part of Our Community</h2>
-    <p>Join us in creating a vibrant international student community where ideas flourish and connections thrive.</p>
-    <a href="/join-us" class="cta-button">Join MIK HUB</a>
-  </section>
-</div>
+        <ul class="values-list">
+          {#each values as v}
+            <li class="values-list__item">
+              <span class="values-list__check">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor" stroke-width="3"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              </span>
+              {v}
+            </li>
+          {/each}
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
 
 <style>
+  /* ── Section shell ──────────────────────── */
   .about {
-    min-height: calc(100vh - 80px);
+    background: var(--color-primary);
+    padding: var(--space-20) var(--space-8);
   }
 
-  .hero {
-    text-align: center;
-    padding: 4rem 1rem;
-    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
-    color: white;
-    border-radius: 0 0 2rem 2rem;
-  }
-
-  h1 {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-  }
-
-  .subtitle {
-    font-size: 1.5rem;
-    opacity: 0.9;
-  }
-
-  .mission {
-    padding: 4rem 2rem;
-    background-color: white;
-    margin: 2rem 0;
-    border-radius: 1rem;
-  }
-
-  .mission-grid {
+  .about__inner {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
+    grid-template-columns: 1fr 420px;
+    gap: var(--space-16);
+    align-items: center;
   }
 
-  .mission-card {
-    padding: 2rem;
-    background-color: #f8f9fa;
-    border-radius: 1rem;
-    transition: transform 0.3s ease;
+  /* ── Left ───────────────────────────────── */
+  .about__heading {
+    font-size:   var(--text-4xl);
+    font-weight: var(--font-extrabold);
+    color:       var(--color-white);
+    line-height: var(--leading-tight);
+    margin-top:  var(--space-3);
+    max-width:   480px;
   }
 
-  .mission-card:hover {
-    transform: translateY(-5px);
+  .about__body {
+    font-size:  var(--text-base);
+    color:      #94a3b8;
+    margin-top: var(--space-4);
+    max-width:  460px;
+    line-height: var(--leading-normal);
   }
 
-  .mission-card h2 {
-    color: #6366f1;
-    margin-bottom: 1rem;
-    font-size: 1.5rem;
+  /* ── Pillars (Mission / Vision) ─────────── */
+  .about__pillars {
+    display:        flex;
+    flex-direction: column;
+    gap:            var(--space-6);
+    margin-top:     var(--space-10);
   }
 
-  .impact {
-    padding: 4rem 2rem;
-    text-align: center;
+  .pillar {
+    display: flex;
+    gap:     var(--space-4);
+    align-items: flex-start;
   }
 
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 2rem;
-    margin-top: 3rem;
+  .pillar__icon {
+    flex-shrink: 0;
+    width:       48px;
+    height:      48px;
+    border-radius: var(--radius-md);
+    background: linear-gradient(135deg, var(--color-accent), #0097a7);
+    display:         flex;
+    align-items:     center;
+    justify-content: center;
+    color: var(--color-white);
   }
 
-  .stat-card {
-    padding: 2rem;
-    background-color: white;
-    border-radius: 1rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  .pillar__title {
+    font-size:   var(--text-base);
+    font-weight: var(--font-bold);
+    color:       var(--color-white);
+    margin-bottom: var(--space-1);
   }
 
-  .stat-card h3 {
-    font-size: 2.5rem;
-    color: #6366f1;
-    margin-bottom: 0.5rem;
+  .pillar__desc {
+    font-size:  var(--text-sm);
+    color:      #94a3b8;
+    line-height: var(--leading-normal);
   }
 
-  .join-section {
-    text-align: center;
-    padding: 4rem 2rem;
-    background-color: #f8f9fa;
-    border-radius: 1rem;
-    margin: 2rem 0;
+  /* ── Values card ────────────────────────── */
+  .values-card {
+    background:    rgba(255, 255, 255, 0.05);
+    border:        1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-xl);
+    padding:       var(--space-8);
+    backdrop-filter: blur(8px);
   }
 
-  .cta-button {
-    display: inline-block;
-    padding: 1rem 2rem;
-    margin-top: 2rem;
-    background-color: #6366f1;
-    color: white;
-    text-decoration: none;
-    border-radius: 2rem;
-    font-weight: bold;
-    transition: transform 0.3s ease;
+  .values-card__header {
+    display:     flex;
+    align-items: center;
+    gap:         var(--space-2);
+    font-size:   var(--text-lg);
+    font-weight: var(--font-bold);
+    color:       var(--color-white);
   }
 
-  .cta-button:hover {
-    transform: translateY(-2px);
-    background-color: #4f46e5;
+  .values-card__header svg {
+    color: var(--color-accent);
   }
 
-  @media (max-width: 992px) {
-    .hero {
-      padding: 3rem 1rem;
-    }
-    
-    h1 {
-      font-size: 2.5rem;
-    }
+  .values-card__sub {
+    font-size:  var(--text-sm);
+    color:      #94a3b8;
+    margin-top: var(--space-2);
+  }
 
-    .subtitle {
-      font-size: 1.3rem;
-    }
-    
-    .mission-grid,
-    .stats-grid {
-      grid-template-columns: repeat(2, 1fr);
+  .values-list {
+    display:        flex;
+    flex-direction: column;
+    gap:            0;
+    margin-top:     var(--space-6);
+  }
+
+  .values-list__item {
+    display:     flex;
+    align-items: center;
+    gap:         var(--space-3);
+    font-size:   var(--text-base);
+    font-weight: var(--font-medium);
+    color:       var(--color-white);
+    padding:     var(--space-4) 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .values-list__item:last-child {
+    border-bottom: none;
+  }
+
+  .values-list__check {
+    width:           28px;
+    height:          28px;
+    border-radius:   50%;
+    background:      rgba(0, 188, 212, 0.15);
+    border:          1px solid rgba(0, 188, 212, 0.3);
+    display:         flex;
+    align-items:     center;
+    justify-content: center;
+    flex-shrink:     0;
+    color:           var(--color-accent);
+  }
+
+  /* ── Responsive ─────────────────────────── */
+  @media (max-width: 1024px) {
+    .about__inner {
+      grid-template-columns: 1fr 360px;
+      gap: var(--space-10);
     }
   }
 
   @media (max-width: 768px) {
-    .hero {
-      padding: 2.5rem 1rem;
-      border-radius: 0 0 1.5rem 1.5rem;
-    }
-    
-    h1 {
-      font-size: 2rem;
+    .about {
+      padding: var(--space-16) var(--space-6);
     }
 
-    .subtitle {
-      font-size: 1.2rem;
-    }
-
-    .mission-grid,
-    .stats-grid {
+    .about__inner {
       grid-template-columns: 1fr;
-      gap: 1.5rem;
     }
-    
-    .mission, .impact, .team, .join-section {
-      padding: 3rem 1.5rem;
+
+    .about__heading {
+      font-size: var(--text-3xl);
+      max-width: 100%;
+    }
+
+    .about__body {
+      max-width: 100%;
     }
   }
-  
+
   @media (max-width: 576px) {
-    .hero {
-      padding: 2rem 1rem;
-      border-radius: 0 0 1rem 1rem;
-    }
-    
-    h1 {
-      font-size: 1.75rem;
+    .about {
+      padding: var(--space-12) var(--space-4);
     }
 
-    .subtitle {
-      font-size: 1.1rem;
-    }
-    
-    .mission, .impact, .team, .join-section {
-      padding: 2rem 1rem;
-      margin: 1rem 0;
-    }
-    
-    .mission-card, .stat-card {
-      padding: 1.5rem;
-    }
-    
-    .cta-button {
-      padding: 0.75rem 1.5rem;
-    }
+    .about__heading { font-size: var(--text-2xl); }
+    .pillar__icon   { width: 40px; height: 40px; }
   }
 </style>

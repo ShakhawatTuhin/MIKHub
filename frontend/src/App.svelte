@@ -1,5 +1,4 @@
 <script>
-  import { Router, Route } from 'svelte-routing';
   import Navbar from './components/Navbar.svelte';
   import Footer from './components/Footer.svelte';
   import Home from './routes/Home.svelte';
@@ -8,19 +7,17 @@
   import About from './routes/About.svelte';
   import FAQ from './routes/FAQ.svelte';
   import Apply from './routes/Apply.svelte';
-
-  export let url = '';
 </script>
 
-<Router {url}>
-  <Navbar />
-  <main class="app-main">
-    <Route path="/"           component={Home}       />
-    <Route path="/activities" component={Activities} />
-    <Route path="/projects"   component={Projects}   />
-    <Route path="/about"      component={About}      />
-    <Route path="/faq"        component={FAQ}        />
-    <Route path="/apply"      component={Apply}      />
-  </main>
-  <Footer />
-</Router>
+<Navbar />
+<main class="app-main">
+  <section id="home">       <Home />       </section>
+  <section id="activities"> <Activities /> </section>
+  <section id="projects">   <Projects />   </section> 
+  <section id="about">      <About />      </section> 
+  <section id="faq">        <FAQ />        </section> 
+  <section id="apply" class="apply-wrapper">
+    <Apply />
+  </section>
+</main>
+<Footer />

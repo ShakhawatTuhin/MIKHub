@@ -1,5 +1,4 @@
 <script>
-  import { Link } from 'svelte-routing';
 </script>
 
 <section class="intro-bar">
@@ -8,9 +7,9 @@
     Where students build, learn and launch their careers.
   </h2>
 
-  <Link to="/activities">
-    EXPLORE ACTIVITIES →
-  </Link>
+  <a href="#activities" class="btn btn-primary">
+    Explore Activities
+  </a>
 
 </section>
 

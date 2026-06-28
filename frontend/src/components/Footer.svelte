@@ -1,5 +1,4 @@
 <script>
-  import { Link } from 'svelte-routing';
   import logo from '/logo.jpeg';  
 </script>
 
@@ -7,9 +6,9 @@
   <div class="footer__inner container">
 
     <div class="footer__brand">
-      <Link to="/">
+      <a href="#home" on:click={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
         <img src={logo} alt="MIK-HUB" class="footer__logo" />
-      </Link>
+      </a>
       <p class="footer__tagline">Where students build, learn and launch their careers.</p>
     </div>
 
@@ -17,10 +16,11 @@
       <div class="footer__col">
         <h4 class="footer__heading">Explore</h4>
         <ul>
-          <li><Link to="/activities">Activities</Link></li>
-          <li><Link to="/projects">Projects</Link></li>
-          <li><Link to="/about">About</Link></li>
-          <li><Link to="/faq">FAQ</Link></li>
+          <a href="#home">MIK-HUB</a>
+          <a href="#activities">Activities</a>
+          <a href="#projects">Projects</a>
+          <a href="#about">About</a>
+          <a href="#faq">FAQ</a>
         </ul>
       </div>
 
@@ -39,7 +39,7 @@
             </a>
           </li>
           <li>
-            <Link to="/admin" class="footer__admin">Admin login</Link>
+            <a href="/admin" class="footer__admin">Admin login</a>
           </li>
         </ul>
       </div>
