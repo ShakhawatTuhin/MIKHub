@@ -26,6 +26,14 @@ This website is our portfolio and our front door: a place where current members,
 
 ---
 
+## Backend development
+The backend will soon be implemented in a seperate folder within the same repo. It will be a Node.js + Express API that serves data to the frontend. The backend will handle:
+- file uploads for event photos and project showcases
+- user authentication for members and admins
+- event management (creating, updating, deleting events)
+- project management (creating, updating, deleting projects)
+- uploading links to Google Forms for membership applications and other forms
+
 ## Planned Sections (Rebrand Roadmap)
 
 The site is currently being refactored. Here's what the new version will include:
