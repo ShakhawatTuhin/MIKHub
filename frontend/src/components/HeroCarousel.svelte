@@ -1,57 +1,84 @@
 <script>
+  import { onMount, onDestroy } from 'svelte';
   import CarouselControls from './CarouselControls.svelte';
 
-  export let activities = [];
-  export let image = null;
+  // slides: [{ image, eyebrow?, date?, title, description }]
+  export let slides = [];
+  export let fallbackImage = null;
+  export let interval = 6000;
 
   let current = 0;
+  let timer;
+  let paused = false;
 
-  function next() {
-    if (!activities.length) return;
-    current = (current + 1) % activities.length;
+  $: if (current >= slides.length) current = 0;
+
+  function restart() {
+    clearInterval(timer);
+    timer = setInterval(() => { if (!paused) go(1, false); }, interval);
   }
 
-  function previous() {
-    if (!activities.length) return;
-    current =
-      (current - 1 + activities.length) %
-      activities.length;
+  function go(step, manual = true) {
+    if (slides.length < 2) return;
+    current = (current + step + slides.length) % slides.length;
+    if (manual) restart();
   }
+
+  onMount(restart);
+  onDestroy(() => clearInterval(timer));
+
+  $: slide = slides[current];
 </script>
 
-<section class="hero" style={image ? `background-image: linear-gradient(rgba(2,22,41,.55), rgba(2,22,41,.85)), url(${image}); background-size: cover; background-position: center;` : ''}>
+<section
+  class="hero"
+  on:mouseenter={() => (paused = true)}
+  on:mouseleave={() => (paused = false)}
+>
+  <div class="bg-stack">
+    {#each slides as s, i (i)}
+      <div
+        class="bg"
+        class:visible={i === current}
+        style={(s.image || fallbackImage) ? `background-image: url(${s.image || fallbackImage})` : ''}
+      ></div>
+    {/each}
+    {#if !slides.length && fallbackImage}
+      <div class="bg visible" style={`background-image: url(${fallbackImage})`}></div>
+    {/if}
+    <div class="shade"></div>
+  </div>
 
   <slot />
 
   <div class="hero-content">
-    {#if activities.length}
-    <p class="eyebrow">ONGOING AT MIK-HUB</p>
-
-    <div class="date-pill">
-      {activities[current].date}
-    </div>
-
-    <h1>{activities[current].title}</h1>
-
-    <p class="description">
-      {activities[current].description}
-    </p>
+    {#if slide}
+      <p class="eyebrow">{slide.eyebrow || 'ONGOING AT MIK-HUB'}</p>
+      {#if slide.date}<div class="date-pill">{slide.date}</div>{/if}
+      {#if slide.title}<h1>{slide.title}</h1>{/if}
+      {#if slide.description}<p class="description">{slide.description}</p>{/if}
+      {#if slides.length > 1}
+        <CarouselControls
+          {current}
+          total={slides.length}
+          onPrev={() => go(-1)}
+          onNext={() => go(1)}
+        />
+      {/if}
     {:else}
-    <p class="eyebrow">MIK-HUB</p>
-    <h1>Build. Learn. Launch.</h1>
+      <p class="eyebrow">MIK-HUB</p>
+      <h1>Build. Learn. Launch.</h1>
     {/if}
-
-    <CarouselControls
-      {current}
-      total={activities.length}
-      onPrev={previous}
-      onNext={next}
-    />
   </div>
-
 </section>
 
 <style>
+  .bg-stack { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
+  .bg { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0; transition: opacity 1s ease; }
+  .bg.visible { opacity: 1; }
+  .shade { position: absolute; inset: 0; background: linear-gradient(rgba(2,22,41,.45), rgba(2,22,41,.85)); }
+  .hero-content { position: relative; z-index: 1; }
+
   .hero {
     min-height: 100vh;
     background: #021629;

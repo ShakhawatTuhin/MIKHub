@@ -27,6 +27,7 @@ app.get('/api/health', (req, res) => res.json({ ok: true }));
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/activities', require('./routes/activities'));
 app.use('/api/projects', require('./routes/projects'));
+app.use('/api/carousel', require('./routes/carousel'));
 app.use('/api/faqs', require('./routes/faqs'));
 app.use('/api/settings', require('./routes/settings'));
 app.use('/api/upload', require('./routes/upload'));

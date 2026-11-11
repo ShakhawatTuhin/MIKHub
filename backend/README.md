@@ -21,6 +21,7 @@ Frontend must call with `credentials: 'include'`. Image URLs are relative (`/upl
 | 🔒 GET | `/api/settings/schema` | Describes editable fields |
 | 🔒 PUT | `/api/settings` | Set Google Form links / text, e.g. `{"form_apply":"https://forms.gle/..","about_body":".."}` |
 | 🔒 PUT/DELETE | `/api/settings/:key/image` | Upload (field `image`) / remove picture: `hero_image`, `events_banner_image` |
+| GET, 🔒 POST/PUT/DELETE | `/api/carousel[/:id]` | Front-page carousel slides (POST multipart field `images`, up to 10 at once; PUT `/api/carousel` with `{order:[ids]}` reorders) |
 | GET | `/api/activities[?status=upcoming\|ongoing\|past&featured=1]` | Events |
 | 🔒 POST/PUT/DELETE | `/api/activities[/:id]` | Add / edit / delete event (JSON or multipart with `image`) |
 | GET, 🔒 POST/PUT/DELETE | `/api/projects[/:id]` | Projects |

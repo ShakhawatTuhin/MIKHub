@@ -12,6 +12,10 @@
   let values = {};
   let activities = [];
   let faqs = [];
+  let slides = [];
+  let slideFiles = [];
+  let slideTitle = '';
+  let slideDesc = '';
 
   const blankEvent = () => ({ id: null, title: '', description: '', date: '', status: 'upcoming', is_featured: false, image_url: null });
   let ev = blankEvent();
@@ -24,8 +28,8 @@
   };
 
   async function refresh() {
-    [schema, values, activities, faqs] = await Promise.all([
-      api('/settings/schema'), api('/settings'), api('/activities'), api('/faqs')
+    [schema, values, activities, faqs, slides] = await Promise.all([
+      api('/settings/schema'), api('/settings'), api('/activities'), api('/faqs'), api('/carousel')
     ]);
   }
 
@@ -77,6 +81,31 @@
     await api(`/activities/${a.id}`, { method: 'DELETE' }); activities = await api('/activities');
   }, 'Event deleted');
 
+  const addSlides = () => run(async () => {
+    if (!slideFiles.length) throw new Error('Choose at least one image');
+    const form = new FormData();
+    for (const f of slideFiles) form.append('images', f);
+    form.append('title', slideTitle); form.append('description', slideDesc);
+    await api('/carousel', { method: 'POST', form });
+    slideFiles = []; slideTitle = ''; slideDesc = '';
+    document.getElementById('slide-files').value = '';
+    slides = await api('/carousel');
+  }, 'Slides added');
+  const saveSlide = (s) => run(async () => {
+    const form = new FormData(); form.append('title', s.title); form.append('description', s.description);
+    await api(`/carousel/${s.id}`, { method: 'PUT', form });
+  }, 'Slide saved');
+  const deleteSlide = (s) => confirm('Remove this slide?') && run(async () => {
+    await api(`/carousel/${s.id}`, { method: 'DELETE' }); slides = await api('/carousel');
+  }, 'Slide removed');
+  const moveSlide = (i, d) => run(async () => {
+    const ids = slides.map((s) => s.id);
+    const j = i + d;
+    if (j < 0 || j >= ids.length) return;
+    [ids[i], ids[j]] = [ids[j], ids[i]];
+    slides = await api('/carousel', { method: 'PUT', body: { order: ids } });
+  });
+
   const saveFaq = () => run(async () => {
     const body = { question: faqForm.question, answer: faqForm.answer };
     await api(faqForm.id ? `/faqs/${faqForm.id}` : '/faqs', { method: faqForm.id ? 'PUT' : 'POST', body });
@@ -107,7 +136,7 @@
     </form>
   {:else}
     <nav>
-      {#each [['content', 'Links & text'], ['pictures', 'Pictures'], ['events', 'Events'], ['faq', 'FAQ']] as [id, label]}
+      {#each [['content', 'Links & text'], ['carousel', 'Home carousel'], ['pictures', 'Pictures'], ['events', 'Events'], ['faq', 'FAQ']] as [id, label]}
         <button class:active={tab === id} on:click={() => { tab = id; notify(''); }}>{label}</button>
       {/each}
     </nav>
@@ -128,6 +157,33 @@
         {/each}
         <button>Save</button>
       </form>
+
+    {:else if tab === 'carousel'}
+      <form class="card" on:submit|preventDefault={addSlides}>
+        <h2>Add carousel images</h2>
+        <p class="hint">Select several images at once. They rotate automatically on the home screen. Caption is optional.</p>
+        <input id="slide-files" type="file" accept="image/*" multiple on:change={(e) => (slideFiles = [...e.target.files])} />
+        <label>Title (optional) <input bind:value={slideTitle} /></label>
+        <label>Description (optional) <textarea rows="2" bind:value={slideDesc}></textarea></label>
+        <button>Upload {slideFiles.length || ''} image{slideFiles.length === 1 ? '' : 's'}</button>
+      </form>
+      {#each slides as s, i (s.id)}
+        <div class="card item">
+          <img class="thumb wide" src={img(s.image_url)} alt="" />
+          <div class="grow">
+            <label>Title <input bind:value={s.title} /></label>
+            <label>Description <textarea rows="2" bind:value={s.description}></textarea></label>
+          </div>
+          <span class="col">
+            <button class="ghost" disabled={i === 0} on:click={() => moveSlide(i, -1)}>↑</button>
+            <button class="ghost" disabled={i === slides.length - 1} on:click={() => moveSlide(i, 1)}>↓</button>
+            <button on:click={() => saveSlide(s)}>Save</button>
+            <button class="danger" on:click={() => deleteSlide(s)}>Delete</button>
+          </span>
+        </div>
+      {:else}
+        <p>No slides yet — the home screen falls back to featured events.</p>
+      {/each}
 
     {:else if tab === 'pictures'}
       {#each keysOf('image') as k}
@@ -226,5 +282,9 @@
   .msg.err { background: #fee2e2; color: #991b1b; }
   .preview { max-width: 100%; max-height: 220px; object-fit: cover; border-radius: 8px; }
   .preview.small { max-height: 90px; align-self: flex-start; }
+  .hint { margin: 0; color: var(--color-text-secondary); font-size: .9rem; }
+  .grow { flex: 1; display: flex; flex-direction: column; gap: .5rem; }
+  .item span.col { flex-direction: column; }
+  .thumb.wide { width: 120px; height: 80px; }
   .thumb { width: 72px; height: 72px; object-fit: cover; border-radius: 8px; }
 </style>
