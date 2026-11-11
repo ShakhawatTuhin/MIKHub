@@ -9,13 +9,13 @@
 
   let current = 0;
   let timer;
-  let paused = false;
+  let touchX = null;
 
   $: if (current >= slides.length) current = 0;
 
   function restart() {
     clearInterval(timer);
-    timer = setInterval(() => { if (!paused) go(1, false); }, interval);
+    timer = setInterval(() => { if (!document.hidden) go(1, false); }, interval);
   }
 
   function go(step, manual = true) {
@@ -24,16 +24,35 @@
     if (manual) restart();
   }
 
+  function select(i) {
+    current = i;
+    restart();
+  }
+
+  function onKey(e) {
+    if (e.key === 'ArrowLeft') go(-1);
+    else if (e.key === 'ArrowRight') go(1);
+  }
+
+  function onTouchEnd(e) {
+    if (touchX === null) return;
+    const dx = e.changedTouches[0].clientX - touchX;
+    touchX = null;
+    if (Math.abs(dx) > 50) go(dx < 0 ? 1 : -1);
+  }
+
   onMount(restart);
   onDestroy(() => clearInterval(timer));
 
   $: slide = slides[current];
 </script>
 
+<svelte:window on:keydown={onKey} />
+
 <section
   class="hero"
-  on:mouseenter={() => (paused = true)}
-  on:mouseleave={() => (paused = false)}
+  on:touchstart={(e) => (touchX = e.touches[0].clientX)}
+  on:touchend={onTouchEnd}
 >
   <div class="bg-stack">
     {#each slides as s, i (i)}
@@ -63,6 +82,7 @@
           total={slides.length}
           onPrev={() => go(-1)}
           onNext={() => go(1)}
+          onSelect={select}
         />
       {/if}
     {:else}
