@@ -33,7 +33,7 @@
 
     <nav class="navbar__links" class:open={menuOpen}>
      <a href="#activities" on:click={closeMenu}>Activities</a>
-     <a href="#projects"   on:click={closeMenu}>Projects</a>
+     <!-- <a href="#projects"   on:click={closeMenu}>Projects</a> -->
      <a href="#about"      on:click={closeMenu}>About</a>
      <a href="#faq"        on:click={closeMenu}>FAQ</a>
      <a href="#apply" class="btn btn-primary navbar__cta" on:click={closeMenu}>
