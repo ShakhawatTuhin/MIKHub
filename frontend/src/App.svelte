@@ -13,7 +13,7 @@
 <main class="app-main">
   <section id="home">       <Home />       </section>
   <section id="activities"> <Activities /> </section>
-  <section id="projects">   <Projects />   </section> 
+  <!-- <section id="projects">   <Projects />   </section> -->
   <section id="about">      <About />      </section> 
   <section id="faq">        <FAQ />        </section> 
   <section id="apply" class="apply-wrapper">
