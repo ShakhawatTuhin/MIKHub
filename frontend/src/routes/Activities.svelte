@@ -1,27 +1,20 @@
 <script>
 
-let activities = [
-  {
-    title: 'AI Build Weekend',
-    description: 'Students teamed up to ship AI-powered mini apps in 48 hours.',
-    date: '2026-06-14',
-    image_url: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800'
-  },
-  {
-    title: 'Design Sprint Workshop',
-    description: 'Hands-on product design sprint mentored by industry pros.',
-    date: '2026-05-30',
-    image_url: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800'
-  },
-  {
-    title: 'TEST_Activity',
-    description: 'TEST desc',
-    date: '2026-07-01',
-    image_url: null
-  }
-];
-let loading = false;
+import { onMount } from 'svelte';
+import { api, settings, img } from '../lib/api.js';
+
+let activities = [];
+let loading = true;
 let error = false;
+
+onMount(async () => {
+  try {
+    activities = await api('/activities');
+  } catch {
+    error = true;
+  }
+  loading = false;
+});
 
   function formatDate(dateString) {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -37,12 +30,13 @@ let error = false;
 </script>
 
 <!-- ── Hero ─────────────────────────────────────── -->
-<section class="act-hero">
+<section class="act-hero"
+  style={$settings.events_banner_image ? `background-image: linear-gradient(rgba(2,22,41,.6), rgba(2,22,41,.85)), url(${img($settings.events_banner_image)}); background-size: cover; background-position: center;` : ''}>
   <div class="container act-hero__inner">
     <span class="label">Ongoing at MIK-HUB</span>
-    <h1 class="act-hero__title">What we're up to</h1>
+    <h1 class="act-hero__title">{$settings.activities_title || "What we're up to"}</h1>
     <p class="act-hero__sub">
-      Workshops, build weekends and meetups happening across the club right now.
+      {$settings.activities_subtitle || 'Workshops, build weekends and meetups happening across the club right now.'}
     </p>
   </div>
 </section>
@@ -74,7 +68,7 @@ let error = false;
           <!-- Image or fallback -->
           <div class="act-card__media">
             {#if act.image_url}
-              <img src={act.image_url} alt={act.title} loading="lazy" />
+              <img src={img(act.image_url)} alt={act.title} loading="lazy" />
             {:else}
               <div class="act-card__fallback">
                 <span>{getInitials(act.title)}</span>
@@ -116,7 +110,7 @@ let error = false;
       <h2>Have an idea for an activity?</h2>
       <p>Pitch it to the club — we'll help you run it.</p>
     </div>
-    <a href="#apply" class="btn btn-primary">Propose an activity</a>
+    <a href={$settings.form_propose_activity || '#apply'} target={$settings.form_propose_activity ? '_blank' : undefined} rel="noopener noreferrer" class="btn btn-primary">Propose an activity</a>
   </div>
 </section>
 

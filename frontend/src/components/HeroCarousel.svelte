@@ -2,25 +2,29 @@
   import CarouselControls from './CarouselControls.svelte';
 
   export let activities = [];
+  export let image = null;
 
   let current = 0;
 
   function next() {
+    if (!activities.length) return;
     current = (current + 1) % activities.length;
   }
 
   function previous() {
+    if (!activities.length) return;
     current =
       (current - 1 + activities.length) %
       activities.length;
   }
 </script>
 
-<section class="hero">
+<section class="hero" style={image ? `background-image: linear-gradient(rgba(2,22,41,.55), rgba(2,22,41,.85)), url(${image}); background-size: cover; background-position: center;` : ''}>
 
   <slot />
 
   <div class="hero-content">
+    {#if activities.length}
     <p class="eyebrow">ONGOING AT MIK-HUB</p>
 
     <div class="date-pill">
@@ -32,6 +36,10 @@
     <p class="description">
       {activities[current].description}
     </p>
+    {:else}
+    <p class="eyebrow">MIK-HUB</p>
+    <h1>Build. Learn. Launch.</h1>
+    {/if}
 
     <CarouselControls
       {current}

@@ -1,4 +1,7 @@
 <script>
+  import { onMount } from 'svelte';
+  import { api } from '../lib/api.js';
+
   let faqs = [
     {
       question: 'Who can join MIK-HUB?',
@@ -26,6 +29,13 @@
       open: false
     }
   ];
+
+  onMount(async () => {
+    try {
+      const rows = await api('/faqs');
+      if (rows.length) faqs = rows.map((r) => ({ question: r.question, answer: r.answer, open: false }));
+    } catch {}
+  });
 
   function toggle(i) {
     faqs = faqs.map((f, idx) =>

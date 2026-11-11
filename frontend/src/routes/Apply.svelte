@@ -1,13 +1,17 @@
+<script>
+  import { settings } from '../lib/api.js';
+</script>
+
 <section class="apply-cta">
   <div class="apply-cta__bg-circle apply-cta__bg-circle--left"></div>
   <div class="apply-cta__bg-circle apply-cta__bg-circle--right"></div>
   <div class="container apply-cta__inner">
-    <h2 class="apply-cta__heading">Ready to build with us?</h2>
+    <h2 class="apply-cta__heading">{$settings.apply_heading || 'Ready to build with us?'}</h2>
     <p class="apply-cta__sub">
-      Applications are open. Tell us what excites you and join the next cohort of MIK-HUB builders.
+      {$settings.apply_text || 'Applications are open. Tell us what excites you and join the next cohort of MIK-HUB builders.'}
     </p>
     <a
-      href="https://forms.google.com/YOUR_FORM_ID"
+      href={$settings.form_apply || '#apply'}
       target="_blank"
       rel="noopener noreferrer"
       class="btn btn-white"

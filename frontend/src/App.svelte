@@ -7,7 +7,14 @@
   import About from './routes/About.svelte';
   import FAQ from './routes/FAQ.svelte';
   import Apply from './routes/Apply.svelte';
+  import Admin from './routes/Admin.svelte';
+
+  const isAdmin = window.location.pathname.replace(/\/$/, '') === '/admin';
 </script>
+
+{#if isAdmin}
+<Admin />
+{:else}
 
 <Navbar />
 <main class="app-main">
@@ -21,3 +28,4 @@
   </section>
 </main>
 <Footer />
+{/if}

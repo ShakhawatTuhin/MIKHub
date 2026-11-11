@@ -1,4 +1,5 @@
 <script>
+  import { settings } from '../lib/api.js';
   import logo from '/logo.jpeg';  
 </script>
 
@@ -28,14 +29,14 @@
         <h4 class="footer__heading">Connect</h4>
         <ul>
           <li>
-            <a href="mailto:mikhub.pte@gmail.com" class="footer__email">
+            <a href="mailto:{$settings.contact_email || 'mikhub.pte@gmail.com'}" class="footer__email">
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="2" y="4" width="20" height="16" rx="2"/>
                 <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
               </svg>
-              mikhub.pte@gmail.com
+              {$settings.contact_email || 'mikhub.pte@gmail.com'}
             </a>
           </li>
           <li>

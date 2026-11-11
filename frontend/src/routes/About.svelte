@@ -1,4 +1,5 @@
 <script>
+  import { settings } from '../lib/api.js';
   const values = ['Curiosity', 'Collaboration', 'Craftsmanship', 'Impact'];
 
   const pillars = [
@@ -21,10 +22,9 @@
     <!-- Left column -->
     <div class="about__left">
       <span class="label">About MIK-HUB</span>
-      <h2 class="about__heading">A community where ideas become careers.</h2>
+      <h2 class="about__heading">{$settings.about_heading || 'A community where ideas become careers.'}</h2>
       <p class="about__body">
-        We bring together curious students, hands-on projects, and mentors who
-        care — so that learning never stays theoretical.
+        {$settings.about_body || 'We bring together curious students, hands-on projects, and mentors who care — so that learning never stays theoretical.'}
       </p>
 
       <div class="about__pillars">
@@ -35,7 +35,7 @@
             </div>
             <div class="pillar__text">
               <h3 class="pillar__title">{p.title}</h3>
-              <p class="pillar__desc">{p.description}</p>
+              <p class="pillar__desc">{($settings['about_' + p.title.toLowerCase()]) || p.description}</p>
             </div>
           </div>
         {/each}

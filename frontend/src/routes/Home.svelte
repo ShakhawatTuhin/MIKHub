@@ -1,29 +1,26 @@
 <script>
+  import { onMount } from 'svelte';
   import Navbar from '../components/Navbar.svelte';
   import HeroCarousel from '../components/HeroCarousel.svelte';
   import IntroBar from '../components/IntroBar.svelte';
+  import { api, settings, img } from '../lib/api.js';
 
-  const activities = [
-    {
-      title: 'TEST_Activity',
-      description: 'TEST desc',
-      date: 'Jul 1, 2026'
-    },
-    {
-      title: 'Hackathon 2026',
-      description: 'Build projects with students across Europe.',
-      date: 'Aug 12, 2026'
-    },
-    {
-      title: 'Startup Challenge',
-      description: 'Pitch ideas and compete for prizes.',
-      date: 'Sep 4, 2026'
-    }
-  ];
+  let activities = [];
+
+  const fmt = (d) =>
+    d ? new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
+
+  onMount(async () => {
+    try {
+      let list = await api('/activities?featured=1');
+      if (!list.length) list = (await api('/activities?status=upcoming')).slice(0, 5);
+      activities = list.map((a) => ({ ...a, date: fmt(a.date) }));
+    } catch {}
+  });
 </script>
 
 <div class="homepage">
-  <HeroCarousel {activities}>
+  <HeroCarousel {activities} image={img($settings.hero_image)}>
     <Navbar />
   </HeroCarousel>
 

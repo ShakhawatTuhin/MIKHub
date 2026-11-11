@@ -1,10 +1,11 @@
 <script>
+  import { settings } from '../lib/api.js';
 </script>
 
 <section class="intro-bar">
 
   <h2>
-    Where students build, learn and launch their careers.
+    {$settings.intro_text || 'Where students build, learn and launch their careers.'}
   </h2>
 
   <a href="#activities" class="btn btn-primary">
