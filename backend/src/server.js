@@ -4,7 +4,7 @@ const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 
-for (const v of ['JWT_SECRET', 'ADMIN_PASSWORD_HASH']) {
+for (const v of ['JWT_SECRET', 'ADMIN_PASSWORD_HASH', 'R2_ACCOUNT_ID', 'R2_ACCESS_KEY_ID', 'R2_SECRET_ACCESS_KEY', 'R2_BUCKET', 'R2_PUBLIC_URL']) {
   if (!process.env[v]) {
     console.error(`Missing ${v} in .env (see .env.example)`);
     process.exit(1);
@@ -44,4 +44,6 @@ app.use((err, req, res, next) => {
 });
 
 const port = process.env.PORT || 3000;
-app.listen(port, () => console.log(`MIK-HUB API on http://localhost:${port}`));
+require('./db').ready
+  .then(() => app.listen(port, () => console.log(`MIK-HUB API on http://localhost:${port}`)))
+  .catch(err => { console.error('Database connection failed:', err.message); process.exit(1); });

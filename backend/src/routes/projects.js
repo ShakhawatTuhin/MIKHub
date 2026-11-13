@@ -4,14 +4,16 @@ const requireAuth = require('../middleware/requireAuth');
 const { upload, removeUploaded } = require('../middleware/upload');
 
 const router = express.Router();
+const NOW = "to_char(now() AT TIME ZONE 'utc', 'YYYY-MM-DD HH24:MI:SS')";
+const getById = id => /^\d+$/.test(String(id)) ? db.get('SELECT * FROM projects WHERE id = ?', [id]) : undefined;
 const hydrate = r => r && { ...r, tags: JSON.parse(r.tags) };
 
-router.get('/', (req, res) => {
-  res.json(db.prepare('SELECT * FROM projects ORDER BY id DESC').all().map(hydrate));
+router.get('/', async (req, res) => {
+  res.json((await db.all('SELECT * FROM projects ORDER BY id DESC')).map(hydrate));
 });
 
-router.get('/:id', (req, res) => {
-  const row = db.prepare('SELECT * FROM projects WHERE id = ?').get(req.params.id);
+router.get('/:id', async (req, res) => {
+  const row = await getById(req.params.id);
   if (!row) return res.status(404).json({ error: 'Not found' });
   res.json(hydrate(row));
 });
@@ -39,29 +41,30 @@ function parse(body, partial) {
 }
 
 function write(partial) {
-  return (req, res) => {
-    const existing = partial ? db.prepare('SELECT * FROM projects WHERE id = ?').get(req.params.id) : null;
-    const cleanup = () => req.file && removeUploaded('/uploads/' + req.file.filename);
+  return async (req, res) => {
+    const existing = partial ? await getById(req.params.id) : null;
+    const cleanup = () => req.file && removeUploaded(req.file.url);
     if (partial && !existing) { cleanup(); return res.status(404).json({ error: 'Not found' }); }
     const { out, errors } = parse(req.body || {}, partial);
     if (errors.length) { cleanup(); return res.status(400).json({ errors }); }
-    if (req.file) out.image_url = '/uploads/' + req.file.filename;
+    if (req.file) out.image_url = req.file.url;
     else if (req.body.remove_image === 'true' || req.body.image_url === '') out.image_url = null;
     else if (typeof req.body.image_url === 'string' && /^https?:\/\//.test(req.body.image_url)) out.image_url = req.body.image_url;
 
     if (!partial) {
-      const info = db.prepare(`INSERT INTO projects (title, description, tags, duration_weeks, image_url)
-        VALUES (@title, @description, @tags, @duration_weeks, @image_url)`)
-        .run({ tags: '[]', duration_weeks: null, image_url: null, ...out });
-      return res.status(201).json(hydrate(db.prepare('SELECT * FROM projects WHERE id = ?').get(info.lastInsertRowid)));
+      const v = { tags: '[]', duration_weeks: null, image_url: null, ...out };
+      const row = await db.get(`INSERT INTO projects (title, description, tags, duration_weeks, image_url)
+        VALUES (?,?,?,?,?) RETURNING *`,
+        [v.title, v.description, v.tags, v.duration_weeks, v.image_url]);
+      return res.status(201).json(hydrate(row));
     }
     const keys = Object.keys(out);
     if (keys.length) {
-      db.prepare(`UPDATE projects SET ${keys.map(k => `${k} = @${k}`).join(', ')}, updated_at = datetime('now') WHERE id = @id`)
-        .run({ ...out, id: existing.id });
+      await db.run(`UPDATE projects SET ${keys.map(k => `${k} = ?`).join(', ')}, updated_at = ${NOW} WHERE id = ?`,
+        [...keys.map(k => out[k]), existing.id]);
       if ('image_url' in out && existing.image_url !== out.image_url) removeUploaded(existing.image_url);
     }
-    res.json(hydrate(db.prepare('SELECT * FROM projects WHERE id = ?').get(existing.id)));
+    res.json(hydrate(await getById(existing.id)));
   };
 }
 
@@ -69,10 +72,10 @@ router.post('/', requireAuth, upload.single('image'), write(false));
 router.put('/:id', requireAuth, upload.single('image'), write(true));
 router.patch('/:id', requireAuth, upload.single('image'), write(true));
 
-router.delete('/:id', requireAuth, (req, res) => {
-  const row = db.prepare('SELECT * FROM projects WHERE id = ?').get(req.params.id);
+router.delete('/:id', requireAuth, async (req, res) => {
+  const row = await getById(req.params.id);
   if (!row) return res.status(404).json({ error: 'Not found' });
-  db.prepare('DELETE FROM projects WHERE id = ?').run(row.id);
+  await db.run('DELETE FROM projects WHERE id = ?', [row.id]);
   removeUploaded(row.image_url);
   res.status(204).end();
 });

@@ -7,7 +7,7 @@ const router = express.Router();
 // Admin: generic image upload -> { image_url }. Use the returned URL in image_url fields.
 router.post('/', requireAuth, upload.single('image'), (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'Attach an image in field "image"' });
-  res.status(201).json({ image_url: '/uploads/' + req.file.filename });
+  res.status(201).json({ image_url: req.file.url });
 });
 
 module.exports = router;
